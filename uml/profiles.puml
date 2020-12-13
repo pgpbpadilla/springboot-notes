@@ -1,0 +1,35 @@
+@startuml
+
+title Spring Profiles
+
+component "@Profile" <<Annotation>> as PA
+
+package "Configuration files" as files {
+	[application-default.properties] as default
+	[application-dev.properties] as dev
+	[application-prod.properties] as prod
+}
+
+package AnnotatedConfiguration as annotated {
+	component MyDevConfiguration <<@Configuration>>
+	PA <-- MyDevConfiguration: has annotation
+
+	component MyProdConfiguration <<@Configuration>>
+	PA <-- MyProdConfiguration: has annotation
+}
+
+
+
+package Environments {
+	[Production] .. prod
+	[Development] .. dev
+	MyDevConfiguration .. [Development]
+	MyProdConfiguration .. [Production]
+}
+
+[SpringbootApplication] ..> files: loads component
+[SpringbootApplication] ..> annotated: loads component
+
+
+
+@enduml
